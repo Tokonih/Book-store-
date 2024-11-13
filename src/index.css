@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Poynter:wght@500&display=swap");
+
+@layer components {
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    white-space: unset;
+  }
+  .book-title {
+    font-family: Poynter, Georgia, serif;
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+    font-size: 2.08rem;
+    line-height: 1.25;
+  }
+  .custom-scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
+  .custom-scrollbar-hidden {
+    -ms-overflow-style: none; 
+    scrollbar-width: none;
+  }
+  
+  .prod-detail-list li{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: start;
+    padding: .375rem 1.5rem;
+    font-weight: 500;
+  }
+
+  .review-heading h2:nth-of-type(1){
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: flex-end;
+    align-items: flex-end;
+    height: 1em;
+    line-height: .3;
+    margin: 0;
+  }
+  .review-heading h2:nth-of-type(1)::before{
+    content: " ";
+    position: relative;
+    background-color: #ccc;
+    display: block;
+    height: 1px;
+    -webkit-flex-grow: .5;
+    flex-grow: .5;
+    margin-right: .5em;
+
+    
+  }
+
+  .review-heading h2:nth-of-type(1)::after{
+    content: " ";
+    position: relative;
+    background-color: #ccc;
+    display: block;
+    height: 1px;
+    -webkit-flex-grow: .5;
+    flex-grow: .5;
+    margin-left: .5em;
+
+  }
+
+  
+}
+@media(max-width <= 425px){
+  .genre-cat{
+    padding: auto 0 !important;
+    overflow-x: scroll;
+    width: 100%;
+    border: 2px solid red ;
+  }
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
