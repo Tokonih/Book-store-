@@ -41,7 +41,6 @@ function BookDetail() {
 
   const handleRatingClick = (rating: number) => {
     console.log(`User clicked on rating: ${rating}`);
-    // Add your logic here for when a rating is clicked
   };
 
   interface MyModalProps {
@@ -69,24 +68,18 @@ function BookDetail() {
       comment: reviewText,
     };
 
-    // console.log(reviewData, authorId!!);
-
-    // reviewHandler(reviewData, authorId!!);
-
     dispatch(markAsRead(reviewData) as any);
 
-    // handleReviewModal();
+    handleReviewModal();
   };
 
-  // interface MarkReadData {
-  //   bookId: any;
-  // }
+
 
   const handleMarkRead = () => {
     const markRead: MarkReadData = {
       bookId: book?._id,
     };
-    // console.log(markRead)
+  
     dispatch(markAsRead(markRead) as any);
   };
 
@@ -97,14 +90,14 @@ function BookDetail() {
           <h1> Loading</h1>
         ) : book ? (
           <div>
-            <div className="max-w-[1440px] px-[30px] md:flex-col m-auto flex items-start">
-              <figure className=" h-[400px] w-[40%] md:w-[100%]  ">
+            <div className="max-w-[1440px] px-[30px]   m-auto flex items-start">
+              <figure className=" h-[400px] w-[40%]  ">
                 <img
                   src={book?.images}
                   className="w-full h-[100%] max-h-[100%] object-contain aspect-[3/4]"
                 />
               </figure>
-              <div className="w-[60%] p-[20px] md:w-[100%]">
+              <div className="w-[60%] p-[20px]">
                 <h1 className="book-title font-[400] text-[2.08rem] leading-[1.25]">
                   {book?.title}
                 </h1>

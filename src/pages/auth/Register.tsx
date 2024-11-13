@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Form from "../../components/Form";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../store/store";
 import { adminSignupHandler } from "../../actions/accountActions";
 import { registrationValidationSchema, FormikConfigType, ISignUp } from "../../components/Form/FormikConfig";
 import { Modal } from "react-bootstrap";
+import { showToast } from "../../common/toast";
 
 interface SignupModalProps {
   isModalOpen: boolean;
@@ -12,6 +13,10 @@ interface SignupModalProps {
 }
 
 const RegisterPage: React.FC<SignupModalProps> = ({ isModalOpen, closeModal }) => {
+  const { loading, success, error } = useSelector(
+    (state: RootState) => state.accountSignup)
+
+    console.log(success)
   const dispatch = useDispatch<AppDispatch>();
 
   const formikConfig: FormikConfigType = {
@@ -33,6 +38,16 @@ const RegisterPage: React.FC<SignupModalProps> = ({ isModalOpen, closeModal }) =
     },
     buttonTitle: "Sign Up",
   };
+
+  useEffect(() => {
+    if (success) {
+      closeModal();
+      showToast.success("Signup successful!");
+    } else if (error) {
+      showToast.error("Signup failed. Please try again.");
+    }
+  }, [success, error]); 
+  
 
   return (
     <Modal show={isModalOpen} onHide={closeModal} centered>

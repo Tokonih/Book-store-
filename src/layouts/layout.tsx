@@ -9,7 +9,7 @@ import RegisterPage from "../pages/auth/Register";
 import LoginPage from "../pages/auth/Login";
 import { FaBook } from "react-icons/fa";
 import CreateBook from "../pages/auth/createBook";
-
+import "../styles/style.css"
 interface NavItem {
   icon?: ReactNode;
   title: string;
@@ -145,7 +145,7 @@ function Layout({ children }: LayoutProps) {
           </div>
 
           {/* Search Bar Section */}
-          <div className="flex items-center justify-between py-[15px] px-[30px] md:px-[10px]">
+          <div className="search-bar-section flex items-center justify-between py-[15px] px-[30px] md:px-[10px]">
             <Link
               to="/"
               className="font-bold text-[#535353] tracking-wider text-[35px] no-underline hidden md:flex nounderline "
@@ -160,7 +160,7 @@ function Layout({ children }: LayoutProps) {
               <FaBook className="h-[90%] w-[40px] bg-[] text-[#3e5962]" />
             </button>
           </div>
-          <ul className="hidden md:flex-[0rem] sm:px[0rem] sm-[0rem] flex justify-between px-4 genre-cat">
+          <ul className="md:flex-[0rem] sm:px[0rem] sm-[0rem] flex justify-between px-4 genre-cat">
             {data
               .filter((d) => !d.top)
               .map((d, index) => (

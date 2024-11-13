@@ -5,6 +5,7 @@ import { AppDispatch, RootState } from "../../store/store";
 import { adminLoginHandler } from "../../actions/accountActions";
 import { loginValidationSchema, FormikConfigType, ILogin, } from "../../components/Form/FormikConfig";
 import { Modal } from "react-bootstrap";
+import { showToast } from "../../common/toast";
 
 interface SignInModalProps {
   isModalOpen: boolean;
@@ -12,27 +13,6 @@ interface SignInModalProps {
 }
 
 const LoginPage: React.FC<SignInModalProps> = ({ isModalOpen, closeModal }) => {
-  // const { loading, success, error } = useSelector(
-  //   (state: RootState) => state.accountLogin
-  // );
-
-  // const dispatch = useDispatch<AppDispatch>();
-
-  // const formikConfig: FormikConfigType = {
-  //   initValues: {
-  //     email: "",
-  //     password: ""
-  //   },
-  //   validationSchema: loginValidationSchema,
-  //   onSubmit: (values:ILogin) => {
-  //     const userData = {
-  //       email: values.email,
-  //       password: values.password,
-  //     };
-  //     dispatch(adminLoginHandler(userData));
-  //   },
-  //   buttonTitle: "Sign In",
-  // };
 
   const { loading, success, error } = useSelector(
     (state: RootState) => state.accountLogin
@@ -56,7 +36,15 @@ const LoginPage: React.FC<SignInModalProps> = ({ isModalOpen, closeModal }) => {
     },
     buttonTitle: "Sign In",
   };
-
+  useEffect(() => {
+    if (success) {
+      closeModal();
+      showToast.success("Sign in successful!");
+    } else if (error) {
+      showToast.error("Sig in failed. Please try again.");
+    }
+  }, [success, error]); 
+  
 
 
   return (

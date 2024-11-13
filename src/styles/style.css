@@ -1,0 +1,5 @@
+@media(width <= 435){
+    .search-bar-section{
+        padding: 0px 10px;
+    }
+}

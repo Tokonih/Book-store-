@@ -17,11 +17,11 @@ const BookCard: React.FC<BookCardProps> = ({
   id
 }) => {
   return (
-    <Link to={`/details/${id}`} className="w-[186px] md:w-[100%] min-h-[1px] cursor-pointer padding-[0.7275px] text-black nounderline">
-      <figure className="h-[243px] md:w-[100%] w-full">
+    <Link to={`/details/${id}`} className="w-[186px] min-h-[1px] cursor-pointer padding-[0.7275px] text-black nounderline">
+      <figure className="h-[243px] w-full">
         <img
           src={imageUrl}
-          className="h-full w-full md:w-[100%]  object-contain"
+          className="h-full w-full object-contain"
           alt={title}
         />
       </figure>
