@@ -41,24 +41,8 @@ const Dashboard: React.FC = () => {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    // Optionally fetch new data based on page
   };
-  const bookslide = [
-    {
-      title: "One Dark Window Exclusive Edition",
-      author: "Rachel Gilling",
-      imageUrl:
-        "https://prodimage.images-bn.com/lf?set=key%5Bresolve.pixelRatio%5D,value%5B1%5D&set=key%5Bresolve.width%5D,value%5B300%5D&set=key%5Bresolve.height%5D,value%5B10000%5D&set=key%5Bresolve.imageFit%5D,value%5Bcontainerwidth%5D&set=key%5Bresolve.allowImageUpscaling%5D,value%5B0%5D&set=key%5Bresolve.format%5D,value%5Bwebp%5D&product=path%5B/pimages/9781510782693_p0_v9%5D&call=url%5Bfile:common/decodeProduct.chain%5D",
-      rating: "⭐⭐⭐",
-    },
-    {
-      title: "Another Book Title",
-      author: "Author Name",
-      imageUrl: "https://via.placeholder.com/300x400",
-      rating: "⭐⭐⭐⭐",
-    },
-    // Add more book objects as needed
-  ];
+
 
   return (
     <Layout>

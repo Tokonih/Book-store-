@@ -4,7 +4,7 @@ import { accountLoginReducer, accountSignupReducer } from '../reducers/accountRe
 import bookReducer, { createBookReducer, singleBookReducer } from '../reducers/bookReducers';
 import { createReviewReducer } from '../reducers/reviewReducers';
 import authorReducer from '../reducers/authorReducer';
-import {profileReducer} from "../reducers/profileReducers"
+import {editProfileReducer, profileReducer} from "../reducers/profileReducers"
 import { markReadReducer } from '../reducers/markReadReducer';
 
 const rootReducer = combineReducers({
@@ -16,7 +16,8 @@ const rootReducer = combineReducers({
   createReviewReducer: createReviewReducer,
   authorReducer: authorReducer,
   profileReducer: profileReducer,
-  markReadReducer:markReadReducer
+  markReadReducer:markReadReducer,
+  editProfileReducer:editProfileReducer
 });
 
 const store = configureStore({

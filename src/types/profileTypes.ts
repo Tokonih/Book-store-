@@ -24,3 +24,19 @@ export interface ProfileState {
     profile: undefined,
     error: undefined,
   };
+
+export interface EditProfileData {
+  name: string;
+  email: string;
+  [key: string]: any; 
+}
+
+export interface EditProfileResponse {
+  success: boolean;
+  message: string;
+  data: {
+    id: string;
+    name: string;
+    email: string;
+  };
+}
