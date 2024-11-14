@@ -5,6 +5,8 @@ import { getAuthor } from "../../actions/authorActions";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
+import person from "../../asset/images/download.png"
+
 
 const Author: React.FC = () => {
   const dispatch = useDispatch();
@@ -25,7 +27,7 @@ const Author: React.FC = () => {
         <div className="max-w-[1440px] m-auto font-[poynter] font-[400] ">
           <div className="flex center gap-[50px] md:flex-col">
             <figure className="border h-[110px] w-[110px] rounded-[50%] overflow-hidden">
-              <img src="" className="w-full h-full" alt="" />
+              <img src={person} className="w-full h-full" alt="" />
             </figure>
             <div className="flex items-start flex-col justify-start">
               <h1 className="text-center text-[36px]">{data?.data?.name}</h1>

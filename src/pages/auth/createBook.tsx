@@ -31,7 +31,7 @@ const CreateBook: React.FC<CreateBookModalProps> = ({ isCreateModalOpen, closeCr
       console.log(bookData)
       dispatch(createBook(bookData));
     },
-    buttonTitle: "Book Up",
+    buttonTitle: "Create Up",
   };
 
   return (
