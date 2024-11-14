@@ -17,7 +17,7 @@ const BookCard: React.FC<BookCardProps> = ({
   id
 }) => {
   return (
-    <Link to={`/details/${id}`} className="w-[186px] min-h-[1px] cursor-pointer padding-[0.7275px] text-black nounderline">
+    <Link to={`/details/${id}`} className="w-[186px] min-h-[1px] cursor-pointer padding-[0.7275px] text-black nounderline link-tag">
       <figure className="h-[243px] w-full">
         <img
           src={imageUrl}
@@ -26,7 +26,7 @@ const BookCard: React.FC<BookCardProps> = ({
         />
       </figure>
       <div className="min-h-[6rem]">
-        <div className="font-lato text-[1.3072rem] font-semibold leading-[1.25] tracking-[.57px] text-center text-black nounderline mb-1 pt-2 overflow-hidden">
+        <div className="font-lato text-[20px] font-semibold leading-[1.25] tracking-[.57px] text-center text-black nounderline mb-1 pt-2 overflow-hidden">
           <span className="line-clamp-2 nounderline">{title}</span>
         </div>
 

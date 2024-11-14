@@ -25,11 +25,11 @@ const Author: React.FC = () => {
     <Layout>
       {!loading || (!error && success) ? (
         <div className="max-w-[1440px] m-auto font-[poynter] font-[400] ">
-          <div className="flex center gap-[50px]">
+          <div className="flex center gap-[50px] author-name">
             <figure className="border h-[110px] w-[110px] rounded-[50%] overflow-hidden">
               <img src={person} className="w-full h-full" alt="" />
             </figure>
-            <div className="flex items-start flex-col justify-start">
+            <div className="flex items-start flex-col justify-start author-about">
               <h1 className="text-center text-[36px]">{data?.data?.name}</h1>
 
               <p className="font-lato font-[400] text-[13px] leading-[1.5] pl-[] w-[80%] pb-[20px] text-[#21282d]">
@@ -37,13 +37,14 @@ const Author: React.FC = () => {
               </p>
             </div>
           </div>
-          <div className="my-[100px]">
-            <div className="review-heading max-w-[1440px] m-auto pt-5 pb-[100px]">
+          <div className="my-[100px] author-books">
+            <div className="author-heading max-w-[1440px] m-auto pt-5 pb-[100px]">
               <h2 className="text-[1.8rem] text-center font-poynter">
                 More From This Author
               </h2>
             </div>
-            {/* <BookCarousel books={data?.data?.books} />; */}
+
+            <BookCarousel books={data?.data?.books} />;
           </div>
         </div>
       ) : (

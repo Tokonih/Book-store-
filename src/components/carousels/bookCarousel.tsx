@@ -6,7 +6,7 @@ import "slick-carousel/slick/slick-theme.css";
 interface Book {
   title: string;
   author: string;
-  imageUrl: string;
+  images: string;
   rating: string; 
 }
 
@@ -21,6 +21,8 @@ const BookCarousel: React.FC<BookCarouselProps> = ({ books }) => {
     centerPadding: "60px",
     slidesToShow: 5,
     swipeToSlide: true,
+    autoplay: true,
+    autoplaySpeed: 3000,
     afterChange: (index: number) => {
       console.log(`Slider Changed to: ${index + 1}`);
     },
@@ -37,24 +39,22 @@ const BookCarousel: React.FC<BookCarouselProps> = ({ books }) => {
   return (
     <div className="slider-container">
       <Slider {...settings}>
-        {books.map((book, i) => (
+        {books && books.map((book, i) => (
           <div key={i}>
             <div className="w-[186px] min-h-[1px] cursor-pointer padding-[0.7275px]">
               <figure className="h-[243px] w-full">
                 <img
-                  src={book.imageUrl}
+                  src={book.images }
                   className="h-full w-full object-contain"
                   alt={book.title}
                 />
               </figure>
               <div className="min-h-[6rem]">
-                <div className="font-lato text-[0.53072rem] font-semibold leading-[1.25] tracking-[.57px] text-center text-black mb-1 pt-2 overflow-hidden">
+                <div className="font-[sans-sarif] text-[15px] font-semibold leading-[1.25] tracking-[.57px] text-center text-black mb-1 pt-2 overflow-hidden">
                   <span className="line-clamp-2">{book.title}</span>
                 </div>
 
-                <div className="text-center mb-[3px] overflow-hidden text-ellipsis line-1.15">
-                  <span>{book.author}</span>
-                </div>
+                
                 <div className="flex items-center justify-center">{book.rating}</div>
               </div>
             </div>

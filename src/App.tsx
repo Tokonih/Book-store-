@@ -4,7 +4,6 @@ import './App.css';
 import { RouterProvider } from 'react-router-dom';
 import { routes } from './routes';
 import Toast from './common/toast';
-
 function App() {
   return (
     <div>

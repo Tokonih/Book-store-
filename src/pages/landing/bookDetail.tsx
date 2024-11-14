@@ -98,14 +98,14 @@ function BookDetail() {
           <h1> Loading</h1>
         ) : book ? (
           <div>
-            <div className="max-w-[1440px] px-[30px]   m-auto flex items-start">
-              <figure className=" h-[400px] w-[40%]  ">
+            <div className="max-w-[1440px] px-[30px]   m-auto flex items-start single-details-box">
+              <figure className=" h-[400px] w-[40%]  single-details-left">
                 <img
                   src={book?.images}
                   className="w-full h-[100%] max-h-[100%] object-contain aspect-[3/4]"
                 />
               </figure>
-              <div className="w-[60%] p-[20px]">
+              <div className="w-[60%] p-[20px] single-details-right">
                 <h1 className="book-title font-[400] text-[2.08rem] leading-[1.25]">
                   {book?.title}
                 </h1>
@@ -228,7 +228,7 @@ function BookDetail() {
                 <h2 className="text-[1.8rem] text-center font-poynter">
                   Customers Review
                 </h2>
-                <div className="mt-[30PX] ">
+                <div className="mt-[30PX]  ">
                   <div className="flex items-center justify-between my-5">
                     <p className="text-[18px] font-[sans-serif] font-[400]">
                       REVIEWS
@@ -240,8 +240,8 @@ function BookDetail() {
                       Write A Review
                     </button>
                   </div>
-                  <div className="my-5 flex items-start">
-                    <div className="w-[30%]">
+                  <div className="my-5 flex items-start rating-container">
+                    <div className="w-[30%]  rating-container">
                       <h3 className=" text-[15px] text-[#21282d ] font-[600] font-[sans-serif]">
                         Rating Snapshot
                       </h3>
@@ -253,7 +253,7 @@ function BookDetail() {
                       </div>
                     </div>
                     {book?.reviews?.map((r) => (
-                      <div className="w-[70%]">
+                      <div className="w-[70%] rating-container">
                         <span className=" text-[#347d56] font-semibold text-[14px]">
                           {r?.rating}⭐ {r?.user?.name}
                         </span>
@@ -326,9 +326,9 @@ function BookDetail() {
                   <Button
                     variant="primary"
                     onClick={handleReview}
-                    // disabled={!selectedRating || !reviewText}
+                    disabled={!selectedRating || !reviewText}
                   >
-                    Save Changes
+                    Post Reviwew
                   </Button>
                 </Modal.Footer>
               </Modal>

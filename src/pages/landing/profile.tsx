@@ -52,21 +52,21 @@ const Profile: React.FC = () => {
         !loading || (!error && profile) ? (
 
       <div className="max-w-[1440px] m-auto pb-[100px]">
-        <div className="review-heading max-w-[1440px] m-auto pt-5 pb-[100px]">
+        <div className="max-w-[1440px] m-auto pt-5 pb-[100px] proflie-title">
           <h2 className="text-[1.8rem] text-center font-poynter">
             Your Profile
           </h2>
         </div>
-        <div className="flex items-start gap-[50px]">
-          <figure className="border h-[110px] w-[110px] rounded-[50%] overflow-hidden">
+        <div className="flex items-start gap-[50px] prof-img-field">
+          <figure className="border h-[110px] w-[110px]  rounded-[50%] overflow-hidden">
             <img src={person} className="w-full h-full" alt="" />
           </figure>
-          <div className="w-[50%] ">
+          <div className="w-[50%] prof-form">
             <Form formikConfig={formikConfig} fields={["name","email"]} />
           </div>
         </div>
 
-        <div className="review-heading max-w-[1440px] m-auto py-[100px]">
+        <div className="read-hisory max-w-[1440px] m-auto py-[100px]">
           <h2 className="text-[1.8rem] text-center font-poynter pb-[50px]">
             Read History
           </h2>

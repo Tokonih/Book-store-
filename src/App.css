@@ -1,4 +1,3 @@
-
 .App {
   text-align: center;
 }
@@ -6,6 +5,10 @@
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+}
+
+.link-tag{
+  text-decoration: none ;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -36,4 +39,129 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+@media (width <= 435px) {
+  .search-bar-section {
+    padding: 0px 10px;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .layout-top {
+    padding-top: 1.25rem !important;
+  }
+
+  .genre-cat {
+    overflow-x: scroll;
+    scrollbar-width: 0px;
+    padding: 10px 10px !important;
+    width: 95%;
+    margin: auto;
+  }
+
+  .single-details-box {
+    border: 1pz solid red !important;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .single-details-left {
+    width: 100%;
+  }
+
+  .single-details-left img {
+    width: 100%;
+    object-fit: contain;
+  }
+
+  .single-details-right {
+    width: 100%;
+  }
+
+  .prod-detail-list {
+    padding-left: 0px;
+  }
+
+  .review-heading {
+    padding: 0px 10px;
+  }
+
+  .rating-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .proflie-title {
+    padding-top: 0rem !important;
+    padding-bottom: 0px !important;
+  }
+
+  .prof-img-field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0px;
+  }
+
+  .read-hisory {
+    padding: 50px 0px;
+  }
+
+  .prof-form {
+    width: 95%;
+    margin: auto;
+  }
+
+  .landing-hero {
+    margin: 0px 0px;
+  }
+  .tk {
+    padding-left: 10px;
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+
+  .my-acct {
+    padding-right: 10px;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+
+  .layout-btn {
+    width: 10px;
+    font-weight: 800;
+    border-right: none;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .author-heading {
+    padding: 0px 0px 10px 0px;
+  }
+
+  .author-books{
+    margin-top: 0px;
+  }
+
+  .author-name{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .author-about{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .author-about p{
+    text-align: center;}
 }

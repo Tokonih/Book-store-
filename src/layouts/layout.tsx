@@ -105,10 +105,10 @@ function Layout({ children }: LayoutProps) {
   }, []);
   
   return (
-    <div className="h-[100vh] pt-5">
+    <div className="h-[100vh] pt-5 layout-top">
       <Toaster position="bottom-left" />
       <div>
-        <div className="max-w-[1440px] m-auto">
+        <div className="max-w-[1440px] m-auto md:pt-1">
           {/* Top navigation */}
           <div className="flex justify-between font-[sans-serif]">
             <ul className="hidden md:flex item-center justify-between">
@@ -123,24 +123,25 @@ function Layout({ children }: LayoutProps) {
                   </li>
                 ))}
             </ul>
+            <button className=" hidden tk" onClick={()=>navigate("/")}>TK</button>
 
             {!userId ? (
               <div className="w-full flex justify-end">
-                <Button className="md:px-[0]" onClick={openModal}>
+                <Button className="md:px-[0] layout-btn " onClick={openModal}>
                   Sign up
                 </Button>
-                <Button className="md:px-[0]" onClick={openLoginModal}>
+                <Button className="md:px-[0] layout-btn" onClick={openLoginModal}>
                   Sign in
                 </Button>
               </div>
             ) : (
               <div className="w-full flex justify-end">
-                <Button
-                  className="md:px-[0]"
+                <button
+                  className="my-acct"
                   onClick={() => navigate(`/profile/${user?.user?._id}`)}
                 >
                   My Account
-                </Button>
+                </button>
               </div>
             )}
           </div>
@@ -176,7 +177,7 @@ function Layout({ children }: LayoutProps) {
         </div>
       </div>
       {letHome ? (
-        <div className="w-full h-auto my-[20px]">
+        <div className="w-full h-auto my-[20px] landing-hero">
           <figure className="h-[100%] w-[100%]">
             <img className="h-[100%] w-[100%]" src={hero} alt="" />
           </figure>

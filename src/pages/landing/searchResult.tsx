@@ -88,7 +88,7 @@ const SearchResult: React.FC = () => {
                 })}
             </div>
             <BookShow>
-              <BookCarousel books={books} />;
+              <BookCarousel books={books as any } />;
             </BookShow>
           </div>
         </div>

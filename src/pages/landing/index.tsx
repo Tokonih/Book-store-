@@ -83,7 +83,7 @@ const Dashboard: React.FC = () => {
             </div>
           )}
           <BookShow>
-            <BookCarousel books={bookslide} />;
+            <BookCarousel books={books as any } />;
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
