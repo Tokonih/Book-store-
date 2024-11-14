@@ -12,6 +12,7 @@ import { reviewHandler } from "../../actions/reviewActions";
 import { markAsRead } from "../../actions/markReadActions";
 import { MarkReadData } from "../../types";
 import { AddReview } from "../../reducers/reviewReducers";
+import { showToast } from "../../common/toast";
 
 function BookDetail() {
   const [activeTab, setActiveTab] = useState<"productDetails" | "aboutAuthor">(
@@ -26,7 +27,10 @@ function BookDetail() {
   const { loading, book, error } = useSelector(
     (state: RootState) => state.singleBook
   );
-  const markReadState = useSelector(
+  const  {
+    loading: markReadLoading,
+    success: markReadSuccess,
+    error: markReadError} = useSelector(
     (state: RootState) => state.markReadReducer
   );
   useEffect(() => {
@@ -37,7 +41,13 @@ function BookDetail() {
     setShowModal(!showModal);
   };
 
-  console.log(book);
+  useEffect(() => {
+    if (markReadSuccess) {
+      showToast.success("Book added to your read list");
+    } else if (markReadError) {
+      showToast.error("Please try again later");
+    }
+  }, [markReadSuccess, markReadError]);
 
   const handleRatingClick = (rating: number) => {
     console.log(`User clicked on rating: ${rating}`);
@@ -73,13 +83,11 @@ function BookDetail() {
     handleReviewModal();
   };
 
-
-
   const handleMarkRead = () => {
     const markRead: MarkReadData = {
       bookId: book?._id,
     };
-  
+
     dispatch(markAsRead(markRead) as any);
   };
 
@@ -103,7 +111,10 @@ function BookDetail() {
                 </h1>
                 <span className="font-lato font-normal text-[0.8rem] my-3">
                   by{" "}
-                  <Link to={`/author/${book?.author?._id}`} className="text-[#347d56] cursor-pointer">
+                  <Link
+                    to={`/author/${book?.author?._id}`}
+                    className="text-[#347d56] cursor-pointer"
+                  >
                     {book?.author?.name}
                   </Link>
                 </span>
@@ -120,7 +131,7 @@ function BookDetail() {
                   onClick={handleMarkRead}
                   className="my-5 h-[3rem] px-[3.2rem] bg-[#3d6db5] text-white font-lato font-[500] text-[1rem]"
                 >
-                  Mark As Read
+                 {markReadLoading? "Loading" : "Mark As Read"} 
                 </button>
               </div>
             </div>

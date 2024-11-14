@@ -12,7 +12,7 @@ const Author: React.FC = () => {
   const dispatch = useDispatch();
   const { success, loading, data, error } = useSelector(
     (state: RootState) => state.authorReducer
-  );
+  );   
   const { authorId } = useParams();
   useEffect(() => {
     dispatch(getAuthor(authorId as string) as any);
@@ -25,7 +25,7 @@ const Author: React.FC = () => {
     <Layout>
       {!loading || (!error && success) ? (
         <div className="max-w-[1440px] m-auto font-[poynter] font-[400] ">
-          <div className="flex center gap-[50px] md:flex-col">
+          <div className="flex center gap-[50px]">
             <figure className="border h-[110px] w-[110px] rounded-[50%] overflow-hidden">
               <img src={person} className="w-full h-full" alt="" />
             </figure>

@@ -11,6 +11,7 @@ import {
   CREATE_BOOK_REQUEST,
   CREATE_BOOK_FAIL,
   CREATE_BOOK_SUCCESS,
+  ADD_NEW_BOOK
 } from "../constants/bookConstants";
 
 interface BookResponse extends ApiResponse {
@@ -20,10 +21,11 @@ interface BookResponse extends ApiResponse {
 }
 
 const apiUrl = process.env.REACT_APP_API_URL;
-// const useToken = sessionStorage.getItem("authToken");
-const useToken = JSON.parse(sessionStorage.getItem("authToken") || "{}");
 
 export const createBook = (createBook: {}) => async (dispatch: Dispatch) => {
+  const tokenString = sessionStorage.getItem("authToken");
+  const useToken = tokenString ? JSON.parse(tokenString) : null;
+  
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -39,10 +41,19 @@ export const createBook = (createBook: {}) => async (dispatch: Dispatch) => {
       config
     );
 
+    console.log(data)
+
+
     dispatch({
       type: CREATE_BOOK_SUCCESS,
       payload: data,
     });
+
+    dispatch({
+      type: ADD_NEW_BOOK,
+      payload: data, 
+    });
+
   } catch (error: any) {
     dispatch({
       type: CREATE_BOOK_FAIL,
@@ -50,6 +61,12 @@ export const createBook = (createBook: {}) => async (dispatch: Dispatch) => {
     });
   }
 };
+
+
+export const resetCreateBookState = () => (dispatch: Dispatch) => {
+  dispatch({ type: "RESET_CREATE_BOOK_STATE" });
+};
+
 
 export const getAllBooks = () => async (dispatch: Dispatch) => {
   try {

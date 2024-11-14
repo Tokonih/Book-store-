@@ -9,7 +9,6 @@ import { MarkReadData } from "../types";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 const useToken = JSON.parse(sessionStorage.getItem("authToken") || "{}");
-console.log(useToken.token);
 
 export const markAsRead = (bookId:any) => async (dispatch: Dispatch) => {
   try {

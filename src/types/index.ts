@@ -1,7 +1,7 @@
 export interface AccountState {
   loading: boolean;
   success?: boolean;
-  error?: string;
+  error?: string | null;
 }
 
 export interface UserData {
@@ -27,6 +27,16 @@ export interface ApiResponse {
   token: string;
   [key: string]: any;
 }
+
+// export interface ApiResponse {
+//   token: string;
+//   user: {
+//     id: string;
+//     email: string;
+//     name: string;
+//   };
+// }
+
 
 export interface BookState {
   success: boolean;

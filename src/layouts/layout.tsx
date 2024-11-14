@@ -82,14 +82,15 @@ function Layout({ children }: LayoutProps) {
   const closeCreateModal = () => setIsCreateModalOpen(false);
 
   const user = JSON.parse(sessionStorage.getItem("userData") || "{}");
-  const [userId, setUserId] = useState(null);
 
+  const [userId, setUserId] = useState(null);
   const checkSessionStorage = () => {
     const userData = sessionStorage.getItem("userData");
     setUserId(userData ? JSON.parse(userData) : null);
   };
 
   useEffect(() => {
+    
     checkSessionStorage();
 
     const handleStorageChange = () => {
@@ -136,7 +137,7 @@ function Layout({ children }: LayoutProps) {
               <div className="w-full flex justify-end">
                 <Button
                   className="md:px-[0]"
-                  onClick={() => navigate(`/profile/${user.token.user._id}`)}
+                  onClick={() => navigate(`/profile/${user?.user?._id}`)}
                 >
                   My Account
                 </Button>

@@ -1,64 +1,109 @@
 import axios from "axios";
-import { adminLoginHandler } from "../../actions/accountActions";
+import { Dispatch } from "redux";
 import {
   accountLoginRequest,
   accountLoginSuccess,
   accountLoginFail,
+  accountSignupRequest,
+  accountSignupSuccess,
+  accountSignupFail,
 } from "../../reducers/accountReducers";
-import { Dispatch } from "redux";
-import { UserLoginData, ApiResponse } from "../../types";
+import { resetAuthStateAction, adminLoginHandler, adminSignupHandler } from "../../actions/accountActions";
+import { resetAuthState } from "../../reducers/authSlice";
 
 jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
-describe("Account Actions", () => {
-  let dispatch: jest.MockedFunction<Dispatch>;
+describe("Auth Actions", () => {
+  let mockDispatch: Dispatch;
 
   beforeEach(() => {
-    dispatch = jest.fn();
+    mockDispatch = jest.fn();
     jest.clearAllMocks();
   });
 
+  describe("resetAuthStateAction", () => {
+    it("should dispatch resetAuthState", () => {
+      resetAuthStateAction()(mockDispatch);
+      expect(mockDispatch).toHaveBeenCalledWith(resetAuthState());
+    });
+  });
+
   describe("adminLoginHandler", () => {
-    it("should dispatch accountLoginSuccess on successful login", async () => {
-      const userLoginData: UserLoginData = {
-        email: "test@example.com",
-        password: "password123",
-      };
+    const userLoginData = { email: "test@example.com", password: "password123" };
+    const apiResponse = {
+      token: "mockToken",
+      user: { id: 1, name: "Test User" },
+    };
 
-      const mockResponse: ApiResponse = {
-        token: "fake-jwt-token",
-        message: "Login successful",
-      };
+    it("should dispatch accountLoginRequest and accountLoginSuccess on success", async () => {
+      mockedAxios.post.mockResolvedValueOnce({ data: apiResponse });
 
-      mockedAxios.post.mockResolvedValueOnce({ data: mockResponse });
+      await adminLoginHandler(userLoginData)(mockDispatch);
 
-      await adminLoginHandler(userLoginData)(dispatch);
-
-      // Assert that the correct actions were dispatched
-      expect(dispatch).toHaveBeenCalledWith(accountLoginRequest());
-      expect(dispatch).toHaveBeenCalledWith(accountLoginSuccess(mockResponse));
+      expect(mockDispatch).toHaveBeenCalledWith(accountLoginRequest());
+      expect(mockDispatch).toHaveBeenCalledWith(accountLoginSuccess(apiResponse));
+      expect(sessionStorage.setItem).toHaveBeenCalledWith(
+        "authToken",
+        JSON.stringify({ token: "mockToken" })
+      );
+      expect(sessionStorage.setItem).toHaveBeenCalledWith(
+        "userData",
+        JSON.stringify(apiResponse)
+      );
     });
 
-    it("should dispatch accountLoginFail on login error", async () => {
-      const userLoginData: UserLoginData = {
-        email: "test@example.com",
-        password: "password123",
-      };
+    it("should dispatch accountLoginRequest and accountLoginFail on failure", async () => {
+      const errorMessage = "Invalid credentials";
+      mockedAxios.post.mockRejectedValueOnce({
+        response: { data: { non_field_errors: errorMessage } },
+      });
 
-      const mockError = {
-        response: { data: { non_field_errors: "Invalid credentials" } },
-      };
+      await adminLoginHandler(userLoginData)(mockDispatch);
 
-      mockedAxios.post.mockRejectedValueOnce(mockError);
+      expect(mockDispatch).toHaveBeenCalledWith(accountLoginRequest());
+      expect(mockDispatch).toHaveBeenCalledWith(accountLoginFail(errorMessage));
+    });
+  });
 
-      await adminLoginHandler(userLoginData)(dispatch);
+  describe("adminSignupHandler", () => {
+    const userData = {
+      name: "John",
+      email: "test@example.com",
+      password: "password123",
+    };
+    const apiResponse = {
+      token: "mockToken",
+      user: { id: 1, name: "John Doe" },
+    };
 
-      // Assert that the correct actions were dispatched
-      expect(dispatch).toHaveBeenCalledWith(accountLoginRequest());
-      expect(dispatch).toHaveBeenCalledWith(
-        accountLoginFail("Invalid credentials")
+    it("should dispatch accountSignupRequest and accountSignupSuccess on success", async () => {
+      mockedAxios.post.mockResolvedValueOnce({ data: apiResponse });
+
+      await adminSignupHandler(userData)(mockDispatch);
+
+      expect(mockDispatch).toHaveBeenCalledWith(accountSignupRequest());
+      expect(mockDispatch).toHaveBeenCalledWith(accountSignupSuccess(apiResponse));
+      expect(sessionStorage.setItem).toHaveBeenCalledWith(
+        "authToken",
+        JSON.stringify({ token: "mockToken" })
       );
+      expect(sessionStorage.setItem).toHaveBeenCalledWith(
+        "userData",
+        JSON.stringify(apiResponse)
+      );
+    });
+
+    it("should dispatch accountSignupRequest and accountSignupFail on failure", async () => {
+      const errorMessage = "Email already exists";
+      mockedAxios.post.mockRejectedValueOnce({
+        response: { data: { non_field_errors: errorMessage } },
+      });
+
+      await adminSignupHandler(userData)(mockDispatch);
+
+      expect(mockDispatch).toHaveBeenCalledWith(accountSignupRequest());
+      expect(mockDispatch).toHaveBeenCalledWith(accountSignupFail(errorMessage));
     });
   });
 });

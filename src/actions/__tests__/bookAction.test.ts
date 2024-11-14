@@ -1,9 +1,16 @@
 import axios from "axios";
-import { createBook, getAllBooks, getSingleBook } from "../../actions/bookActions";
+import { Dispatch } from "@reduxjs/toolkit";
+import {
+  createBook,
+  getAllBooks,
+  getSingleBook,
+  resetCreateBookState,
+} from "../bookActions";
 import {
   CREATE_BOOK_REQUEST,
   CREATE_BOOK_SUCCESS,
   CREATE_BOOK_FAIL,
+  ADD_NEW_BOOK,
   GET_BOOK_REQUEST,
   GET_BOOK_SUCCESS,
   GET_BOOK_FAIL,
@@ -13,41 +20,61 @@ import {
 } from "../../constants/bookConstants";
 
 jest.mock("axios");
+const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe("Book Actions", () => {
-  let dispatch:any;
+  let mockDispatch: Dispatch;
 
   beforeEach(() => {
-    dispatch = jest.fn(); 
-    jest.clearAllMocks(); 
+    mockDispatch = jest.fn();
+    jest.clearAllMocks();
+    sessionStorage.clear();
   });
 
   describe("createBook", () => {
-    it("should dispatch CREATE_BOOK_SUCCESS on successful book creation", async () => {
-      const mockBook = { title: "Test Book", author: "Test Author" };
-      const mockResponse = { data: { message: "Book created successfully" } };
+    const createBookPayload = { title: "Test Book", author: "Author Name" };
+    const apiResponse = {
+      id: 1,
+      title: "Test Book",
+      author: "Author Name",
+    };
 
-      (axios.post as jest.Mock).mockResolvedValueOnce(mockResponse);
-
-      await createBook(mockBook)(dispatch);
-
-      expect(dispatch).toHaveBeenCalledWith({ type: CREATE_BOOK_REQUEST });
-      expect(dispatch).toHaveBeenCalledWith({
-        type: CREATE_BOOK_SUCCESS,
-        payload: mockResponse.data,
-      });
+    beforeEach(() => {
+      sessionStorage.setItem("authToken", JSON.stringify({ token: "mockToken" }));
     });
 
-    it("should dispatch CREATE_BOOK_FAIL on failed book creation", async () => {
-      const mockBook = { title: "Test Book", author: "Test Author" };
-      const mockError = new Error("Failed to create");
+    it("should dispatch CREATE_BOOK_REQUEST, CREATE_BOOK_SUCCESS, and ADD_NEW_BOOK on success", async () => {
+      mockedAxios.post.mockResolvedValueOnce({ data: apiResponse });
 
-      (axios.post as jest.Mock).mockRejectedValueOnce(mockError);
+      await createBook(createBookPayload)(mockDispatch);
 
-      await createBook(mockBook)(dispatch);
+      expect(mockDispatch).toHaveBeenCalledWith({ type: CREATE_BOOK_REQUEST });
+      expect(mockDispatch).toHaveBeenCalledWith({
+        type: CREATE_BOOK_SUCCESS,
+        payload: apiResponse,
+      });
+      expect(mockDispatch).toHaveBeenCalledWith({
+        type: ADD_NEW_BOOK,
+        payload: apiResponse,
+      });
+      expect(mockedAxios.post).toHaveBeenCalledWith(
+        `${process.env.REACT_APP_API_URL}book/create`,
+        createBookPayload,
+        expect.objectContaining({
+          headers: expect.objectContaining({
+            Authorization: "Bearer mockToken",
+          }),
+        })
+      );
+    });
 
-      expect(dispatch).toHaveBeenCalledWith({ type: CREATE_BOOK_REQUEST });
-      expect(dispatch).toHaveBeenCalledWith({
+    it("should dispatch CREATE_BOOK_REQUEST and CREATE_BOOK_FAIL on failure", async () => {
+      mockedAxios.post.mockRejectedValueOnce(new Error("Failed to create"));
+
+      await createBook(createBookPayload)(mockDispatch);
+
+      expect(mockDispatch).toHaveBeenCalledWith({ type: CREATE_BOOK_REQUEST });
+      expect(mockDispatch).toHaveBeenCalledWith({
         type: CREATE_BOOK_FAIL,
         payload: "Failed to create",
       });
@@ -55,63 +82,82 @@ describe("Book Actions", () => {
   });
 
   describe("getAllBooks", () => {
-    it("should dispatch GET_BOOK_SUCCESS on successful fetch", async () => {
-      const mockResponse = { data: { books: [{ id: 1, title: "Book 1" }] } };
+    const apiResponse = [
+      { id: 1, title: "Book 1", author: "Author 1" },
+      { id: 2, title: "Book 2", author: "Author 2" },
+    ];
 
-      (axios.get as jest.Mock).mockResolvedValueOnce(mockResponse);
+    it("should dispatch GET_BOOK_REQUEST and GET_BOOK_SUCCESS on success", async () => {
+      mockedAxios.get.mockResolvedValueOnce({ data: apiResponse });
 
-      await getAllBooks()(dispatch);
+      await getAllBooks()(mockDispatch);
 
-      expect(dispatch).toHaveBeenCalledWith({ type: GET_BOOK_REQUEST });
-      expect(dispatch).toHaveBeenCalledWith({
+      expect(mockDispatch).toHaveBeenCalledWith({ type: GET_BOOK_REQUEST });
+      expect(mockDispatch).toHaveBeenCalledWith({
         type: GET_BOOK_SUCCESS,
-        payload: mockResponse.data,
+        payload: apiResponse,
       });
+      expect(mockedAxios.get).toHaveBeenCalledWith(
+        `${process.env.REACT_APP_API_URL}book/`,
+        expect.objectContaining({
+          headers: { "Content-Type": "application/json" },
+        })
+      );
     });
 
-    it("should dispatch GET_BOOK_FAIL on failed fetch", async () => {
-      const mockError = { response: { data: { non_field_errors: "Error" } } };
+    it("should dispatch GET_BOOK_REQUEST and GET_BOOK_FAIL on failure", async () => {
+      mockedAxios.get.mockRejectedValueOnce(new Error("Failed to fetch"));
 
-      (axios.get as jest.Mock).mockRejectedValueOnce(mockError);
+      await getAllBooks()(mockDispatch);
 
-      await getAllBooks()(dispatch);
-
-      expect(dispatch).toHaveBeenCalledWith({ type: GET_BOOK_REQUEST });
-      expect(dispatch).toHaveBeenCalledWith({
+      expect(mockDispatch).toHaveBeenCalledWith({ type: GET_BOOK_REQUEST });
+      expect(mockDispatch).toHaveBeenCalledWith({
         type: GET_BOOK_FAIL,
-        payload: "Error",
+        payload: "Failed to fetch",
       });
     });
   });
 
   describe("getSingleBook", () => {
-    it("should dispatch GET_SINGLE_BOOK_SUCCESS on successful fetch", async () => {
-      const mockBookId = "123";
-      const mockResponse = { data: { book: { id: "123", title: "Book 123" } } };
+    const bookId = "1";
+    const apiResponse = { id: 1, title: "Single Book", author: "Author Name" };
 
-      (axios.get as jest.Mock).mockResolvedValueOnce(mockResponse);
+    it("should dispatch GET_SINGLE_BOOK_REQUEST and GET_SINGLE_BOOK_SUCCESS on success", async () => {
+      mockedAxios.get.mockResolvedValueOnce({ data: apiResponse });
 
-      await getSingleBook(mockBookId)(dispatch);
+      await getSingleBook(bookId)(mockDispatch);
 
-      expect(dispatch).toHaveBeenCalledWith({ type: GET_SINGLE_BOOK_REQUEST });
-      expect(dispatch).toHaveBeenCalledWith({
+      expect(mockDispatch).toHaveBeenCalledWith({ type: GET_SINGLE_BOOK_REQUEST });
+      expect(mockDispatch).toHaveBeenCalledWith({
         type: GET_SINGLE_BOOK_SUCCESS,
-        payload: mockResponse.data,
+        payload: apiResponse,
       });
+      expect(mockedAxios.get).toHaveBeenCalledWith(
+        `${process.env.REACT_APP_API_URL}book/${bookId}`,
+        expect.objectContaining({
+          headers: { "Content-Type": "application/json" },
+        })
+      );
     });
 
-    it("should dispatch GET_SINGLE_BOOK_FAIL on failed fetch", async () => {
-      const mockBookId = "123";
-      const mockError = { response: { data: { non_field_errors: "Error" } } };
+    it("should dispatch GET_SINGLE_BOOK_REQUEST and GET_SINGLE_BOOK_FAIL on failure", async () => {
+      mockedAxios.get.mockRejectedValueOnce(new Error("Failed to fetch book"));
 
-      (axios.get as jest.Mock).mockRejectedValueOnce(mockError);
+      await getSingleBook(bookId)(mockDispatch);
 
-      await getSingleBook(mockBookId)(dispatch);
-
-      expect(dispatch).toHaveBeenCalledWith({ type: GET_SINGLE_BOOK_REQUEST });
-      expect(dispatch).toHaveBeenCalledWith({
+      expect(mockDispatch).toHaveBeenCalledWith({ type: GET_SINGLE_BOOK_REQUEST });
+      expect(mockDispatch).toHaveBeenCalledWith({
         type: GET_SINGLE_BOOK_FAIL,
-        payload: "Error",
+        payload: "Failed to fetch book",
+      });
+    });
+  });
+
+  describe("resetCreateBookState", () => {
+    it("should dispatch RESET_CREATE_BOOK_STATE", () => {
+      resetCreateBookState()(mockDispatch);
+      expect(mockDispatch).toHaveBeenCalledWith({
+        type: "RESET_CREATE_BOOK_STATE",
       });
     });
   });

@@ -9,7 +9,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const SearchResult: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const totalPages = 10; // Replace with the actual total number of pages
+  const totalPages = 10;
   const navigate = useNavigate();
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -79,7 +79,7 @@ const SearchResult: React.FC = () => {
                     <BookCard
                       id={book._id}
                       key={book._id}
-                      imageUrl={book.images[0] || ""}
+                      imageUrl={book.images}
                       title={book.title}
                       author={book.author.name}
                       rating={book.ratings}

@@ -9,6 +9,7 @@ import {
   CREATE_BOOK_REQUEST,
   CREATE_BOOK_FAIL,
   CREATE_BOOK_SUCCESS,
+  ADD_NEW_BOOK,
 } from "../constants/bookConstants";
 import { boolean } from "yup";
 import { act } from "react";
@@ -36,7 +37,7 @@ const initialState: BookState = {
 const singleBookInitialState: singleBookState = {
   success: false,
   book: {
-    _id:"",
+    _id: "",
     title: "",
     images: "",
   },
@@ -44,29 +45,36 @@ const singleBookInitialState: singleBookState = {
   error: null,
 };
 
-export interface CreateBook {
+export interface CreateBookState {
   title: string;
   description: string;
   author: string;
   images: string;
+  success: boolean;
+  error?: string;
 }
 
-const createBookInitialState: CreateBook = {
+const createBookInitialState: CreateBookState = {
   title: "",
   description: "",
   author: "",
   images: "",
+  success: false,
 };
 
 export const createBookReducer = (
   state = createBookInitialState,
   action: any
-): CreateBook => {
+): CreateBookState => {
   switch (action.type) {
-    case CREATE_BOOK_FAIL:
+    case CREATE_BOOK_REQUEST:
+      return { ...state, success: false, error: undefined };
     case CREATE_BOOK_SUCCESS:
+      return { ...action.payload, success: true };
     case CREATE_BOOK_FAIL:
-      return { ...action.payload };
+      return { ...state, success: false, error: action.payload };
+    case "RESET_CREATE_BOOK_STATE":
+      return createBookInitialState;
     default:
       return state;
   }
@@ -78,9 +86,10 @@ export const bookReducer = (state = initialState, action: any): BookState => {
       return { ...state, loading: true };
     case "GET_BOOK_SUCCESS":
       return { ...action.payload };
-    // return { ...state, loading: false, data: action.payload };
     case "GET_BOOK_FAIL":
       return { ...state, loading: false, error: action.payload };
+    case ADD_NEW_BOOK:
+      return { ...state, books: [action.payload, ...state.books] };
     default:
       return state;
   }

@@ -12,85 +12,75 @@ import {
 } from "../reducers/accountReducers";
 import { UserLoginData, UserData, ApiResponse } from "../types";
 import humps from "humps";
+import { resetAuthState } from "../reducers/authSlice";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
-// Account Login Action
+export const resetAuthStateAction = () => (dispatch: Dispatch) => {
+  dispatch(resetAuthState());
+};
+
+
+const performAuthRequest = async (
+  dispatch: Dispatch,
+  requestAction: Function,
+  successAction: Function,
+  failAction: Function,
+  apiEndpoint: string,
+  payload: any
+) => {
+  try {
+    dispatch(requestAction());
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.post<ApiResponse>(apiEndpoint, payload, config);
+
+    sessionStorage.setItem(
+      "authToken",
+      JSON.stringify({ token: data.token })
+    );
+
+    sessionStorage.setItem("userData", JSON.stringify(data));
+
+    dispatch(successAction(data));
+  } catch (error: any) {
+    const errorMessage =
+      error.response?.data?.non_field_errors || error.message;
+    dispatch(failAction(errorMessage));
+  }
+};
+
+
 export const adminLoginHandler =
-  (UserLoginData: UserLoginData) => async (dispatch: Dispatch) => {
-    try {
-      dispatch(accountLoginRequest());
-
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-
-      const { data } = await axios.post<ApiResponse>(
-        `${apiUrl}users/login/`,
-        UserLoginData,
-        config
-      );
-      console.log(data);
-      const response: ApiResponse = data; 
-
-      sessionStorage.setItem(
-        "authToken",
-        JSON.stringify({ token: response.token })
-      );
-
-      sessionStorage.setItem(
-        "userData",
-        JSON.stringify({ token: response})
-      );
-
-      // Dispatch success action
-      dispatch(accountLoginSuccess(response)); // Dispatch with the correct type
-    } catch (error: any) {
-      dispatch(
-        accountLoginFail(
-          error.response?.data?.non_field_errors || error.message
-        )
-      );
-    }
+  (userLoginData: UserLoginData) => async (dispatch: Dispatch) => {
+    const endpoint = `${apiUrl}users/login/`;
+    await performAuthRequest(
+      dispatch,
+      accountLoginRequest,
+      accountLoginSuccess,
+      accountLoginFail,
+      endpoint,
+      userLoginData
+    );
   };
 
-// Account Register Action
-export const adminSignupHandler = (userData: UserData) => async (dispatch: Dispatch) => {
-    try {
-      dispatch(accountSignupRequest());
-  
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-  
-      // Decamelize user data
-      const decamelizedData = humps.decamelizeKeys(userData);
-      console.log("User data after decamelization:", decamelizedData);
-  
-      // Make the API request
-      const { data } = await axios.post<ApiResponse>(
-        `${apiUrl}users/register/`, 
-        decamelizedData,
-        config
-      );
-  
-      console.log("Response data:", data);
-  
-      const response = humps.camelizeKeys(data) as ApiResponse;
-  
-      sessionStorage.setItem("authToken", JSON.stringify({ token: response.token }));
-  
-      dispatch(accountSignupSuccess(response));
-    } catch (error: any) {
-      console.error("Error occurred:", error);
-      console.error("API error response:", error.response?.data);
-  
-      const errorMessage = error.response?.data?.non_field_errors || error.message;
-      dispatch(accountSignupFail(errorMessage));
-    }
+export const adminSignupHandler =
+  (userData: UserData) => async (dispatch: Dispatch) => {
+    const endpoint = `${apiUrl}users/register/`;
+    const decamelizedData = humps.decamelizeKeys(userData);
+    await performAuthRequest(
+      dispatch,
+      accountSignupRequest,
+      accountSignupSuccess,
+      accountSignupFail,
+      endpoint,
+      decamelizedData
+    );
   };
-  
+
+

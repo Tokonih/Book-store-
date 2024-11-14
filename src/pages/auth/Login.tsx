@@ -41,7 +41,7 @@ const LoginPage: React.FC<SignInModalProps> = ({ isModalOpen, closeModal }) => {
       closeModal();
       showToast.success("Sign in successful!");
     } else if (error) {
-      showToast.error("Sig in failed. Please try again.");
+      showToast.error("Sign in failed. Please try again.");
     }
   }, [success, error]); 
   

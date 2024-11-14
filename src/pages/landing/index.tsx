@@ -76,7 +76,7 @@ const Dashboard: React.FC = () => {
                   key={bookData._id}
                   imageUrl={bookData.images}
                   title={bookData.title}
-                  author={bookData.author.name}
+                  author={bookData.author?.name || "Unknown Author"}
                   rating={bookData.ratings}
                 />
               ))}
