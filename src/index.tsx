@@ -3,21 +3,44 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import toast from "react-hot-toast";
 import { Provider } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";
 import store from "./store/store";
-// const notify = (msg: string) => toast(msg);
+import axios from "axios";
+import ErrorBoundary from "./components/errorBandary";
+import { showToast } from "./common/toast";
+
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error("Global API error:", error);
+    showToast.error("Something went wrong. Please try again later.")
+    return Promise.reject(error);
+  }
+);
+
+window.onerror = (message, source, lineno, colno, error) => {
+  console.error("Uncaught error:", message, error);
+  showToast.error("An unexpected error occurred!")
+  // alert("An unexpected error occurred!");
+};
+
+window.onunhandledrejection = (event) => {
+  console.error("Unhandled promise rejection:", event.reason);
+  showToast.error("Something went wrong. Please try again later.")
+};
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
+
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-
+    <ErrorBoundary>
+      <Provider store={store}>
         <App />
-    </Provider>
+      </Provider>
+    </ErrorBoundary>
   </React.StrictMode>
 );
 

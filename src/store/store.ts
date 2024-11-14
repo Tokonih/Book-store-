@@ -6,6 +6,7 @@ import { createReviewReducer } from '../reducers/reviewReducers';
 import authorReducer from '../reducers/authorReducer';
 import {editProfileReducer, profileReducer} from "../reducers/profileReducers"
 import { markReadReducer } from '../reducers/markReadReducer';
+import { errorMiddleware } from '../middleWares/errorMiddleWare';
 
 const rootReducer = combineReducers({
   accountLogin: accountLoginReducer,
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
 
 const store = configureStore({
   reducer: rootReducer,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(errorMiddleware),
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
