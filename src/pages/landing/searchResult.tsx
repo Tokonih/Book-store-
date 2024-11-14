@@ -15,22 +15,7 @@ const SearchResult: React.FC = () => {
     setCurrentPage(page);
     // Opti
   };
-  const books = [
-    {
-      title: "One Dark Window Exclusive Edition",
-      author: "Rachel Gilling",
-      imageUrl:
-        "https://prodimage.images-bn.com/lf?set=key%5Bresolve.pixelRatio%5D,value%5B1%5D&set=key%5Bresolve.width%5D,value%5B300%5D&set=key%5Bresolve.height%5D,value%5B10000%5D&set=key%5Bresolve.imageFit%5D,value%5Bcontainerwidth%5D&set=key%5Bresolve.allowImageUpscaling%5D,value%5B0%5D&set=key%5Bresolve.format%5D,value%5Bwebp%5D&product=path%5B/pimages/9781510782693_p0_v9%5D&call=url%5Bfile:common/decodeProduct.chain%5D",
-      rating: "⭐⭐⭐",
-    },
-    {
-      title: "Another Book Title",
-      author: "Author Name",
-      imageUrl: "https://via.placeholder.com/300x400",
-      rating: "⭐⭐⭐⭐",
-    },
-    // Add more book objects as needed
-  ];
+
 
   const location = useLocation();
   const [searchResults, setSearchResults] = useState([]);
@@ -67,7 +52,7 @@ const SearchResult: React.FC = () => {
       {!loading && !error ? (
         <div>
           <div className="max-w-[1440px] m-auto">
-            <div className="review-heading pt-5 pb-[100px]">
+            <div className="pt-5 pb-[100px]">
               <h2 className="text-[1.8rem] text-center font-poynter">
                 Search Result
               </h2>
@@ -87,9 +72,7 @@ const SearchResult: React.FC = () => {
                   );
                 })}
             </div>
-            <BookShow>
-              <BookCarousel books={books as any } />;
-            </BookShow>
+           
           </div>
         </div>
       ) : (
